@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="gpa2014Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Assets">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeID" Type="int" />
+          <Property Name="CardName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Units" Type="int" />
+          <Property Name="Grade" Type="int" />
+          <Property Name="Price" Type="money" />
+          <Property Name="CreatorId" Type="int" />
+          <Property Name="Year" Type="int" />
+          <Property Name="dateCreated" Type="date" />
+        </EntityType>
+        <EntityType Name="Creators">
+          <Key>
+            <PropertyRef Name="CreatorId" />
+          </Key>
+          <Property Name="CreatorId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreatorName" Type="nvarchar" MaxLength="50" />
+          <Property Name="URL" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateCreated" Type="date" />
+        </EntityType>
+        <Association Name="FK_Assets_Creators">
+          <End Role="Creators" Type="Self.Creators" Multiplicity="0..1" />
+          <End Role="Assets" Type="Self.Assets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Creators">
+              <PropertyRef Name="CreatorId" />
+            </Principal>
+            <Dependent Role="Assets">
+              <PropertyRef Name="CreatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="gpa2014ModelStoreContainer">
+          <EntitySet Name="Assets" EntityType="Self.Assets" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Creators" EntityType="Self.Creators" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Assets_Creators" Association="Self.FK_Assets_Creators">
+            <End Role="Creators" EntitySet="Creators" />
+            <End Role="Assets" EntitySet="Assets" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="gpa2014Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Asset">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeID" Type="Int32" />
+          <Property Name="CardName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Units" Type="Int32" />
+          <Property Name="Grade" Type="Int32" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CreatorId" Type="Int32" />
+          <Property Name="Year" Type="Int32" />
+          <Property Name="dateCreated" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Creator" Relationship="gpa2014Model.FK_Assets_Creators" FromRole="Asset" ToRole="Creator" />
+        </EntityType>
+        <EntityType Name="Creator">
+          <Key>
+            <PropertyRef Name="CreatorId" />
+          </Key>
+          <Property Name="CreatorId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreatorName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="URL" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Assets" Relationship="gpa2014Model.FK_Assets_Creators" FromRole="Creator" ToRole="Asset" />
+        </EntityType>
+        <EntityContainer Name="gpa2014Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Assets" EntityType="Self.Asset" />
+          <EntitySet Name="Creators" EntityType="Self.Creator" />
+          <AssociationSet Name="FK_Assets_Creators" Association="gpa2014Model.FK_Assets_Creators">
+            <End Role="Creator" EntitySet="Creators" />
+            <End Role="Asset" EntitySet="Assets" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="FK_Assets_Creators">
+          <End Type="gpa2014Model.Creator" Role="Creator" Multiplicity="0..1" />
+          <End Type="gpa2014Model.Asset" Role="Asset" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Creator">
+              <PropertyRef Name="CreatorId" />
+            </Principal>
+            <Dependent Role="Asset">
+              <PropertyRef Name="CreatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="gpa2014ModelStoreContainer" CdmEntityContainer="gpa2014Entities">
+          <EntitySetMapping Name="Assets">
+            <EntityTypeMapping TypeName="gpa2014Model.Asset">
+              <MappingFragment StoreEntitySet="Assets">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="CardName" ColumnName="CardName" />
+                <ScalarProperty Name="Units" ColumnName="Units" />
+                <ScalarProperty Name="Grade" ColumnName="Grade" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="CreatorId" ColumnName="CreatorId" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="dateCreated" ColumnName="dateCreated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Creators">
+            <EntityTypeMapping TypeName="gpa2014Model.Creator">
+              <MappingFragment StoreEntitySet="Creators">
+                <ScalarProperty Name="CreatorId" ColumnName="CreatorId" />
+                <ScalarProperty Name="CreatorName" ColumnName="CreatorName" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
